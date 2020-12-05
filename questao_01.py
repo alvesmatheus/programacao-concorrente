@@ -1,5 +1,5 @@
 from threading import Thread, Semaphore
-import os, random, time
+import random, time
 
 CAR_CAPACITY = 4
 N_PASSENGERS = 12
