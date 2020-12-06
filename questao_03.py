@@ -1,7 +1,5 @@
 from threading import Thread, Semaphore
-import random, time
-
-N_STUDENTS = 7
+import random, sys, time
 
 
 class BarTable:
@@ -60,9 +58,9 @@ def run_student(student, bar_table):
     student.leave(bar_table)
 
 
-def main():
+def main(n_students):
     bar_table = BarTable()
-    students = [Student(i + 1) for i in range(N_STUDENTS)]
+    students = [Student(i + 1) for i in range(n_students)]
 
     student_threads = [
         Thread(target=run_student, args=[student, bar_table])
@@ -73,4 +71,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    has_arguments = (len(sys.argv) == 2)
+
+    n_students = int(sys.argv[1]) if has_arguments else 7
+
+    main(n_students)

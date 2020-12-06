@@ -1,8 +1,5 @@
 from threading import Thread, Semaphore
-import random, time
-
-CAR_CAPACITY = 4
-N_PASSENGERS = 12
+import random, sys, time
 
 
 class Car:
@@ -91,16 +88,16 @@ def run_passenger(passenger, car, board_queue, unboard_queue):
     passenger.unboard(car)
 
 
-def main():
+def main(n_passengers, car_capacity):
     board_queue = Semaphore(0)
     unboard_queue = Semaphore(0)
     kwargs = {'board_queue': board_queue, 'unboard_queue': unboard_queue}
 
-    car = Car(CAR_CAPACITY)
-    passengers = [Passenger(i + 1) for i in range(N_PASSENGERS)]
+    car = Car(car_capacity)
+    passengers = [Passenger(i + 1) for i in range(n_passengers)]
 
     car_thread = Thread(target=run_car,
-                        args=[car, CAR_CAPACITY, N_PASSENGERS],
+                        args=[car, car_capacity, n_passengers],
                         kwargs=kwargs)
 
     passenger_threads = [
@@ -113,4 +110,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    has_arguments = (len(sys.argv) == 3)
+
+    n_passengers = int(sys.argv[1]) if has_arguments else 8
+    car_capacity = int(sys.argv[2]) if has_arguments else 4
+
+    main(n_passengers, car_capacity)
